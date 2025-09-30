@@ -1,3 +1,5 @@
+
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -20,6 +22,16 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+vim.cmd.colorscheme("unokai")
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.foldmethod = "indent"
+vim.opt.shiftwidth = 4
+vim.cmd([[
+    filetype on 
+    filetype plugin on
+    filetype indent on
+]])
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -33,3 +45,36 @@ require("lazy").setup({
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
+
+
+
+local harpoon = require("harpoon")
+
+-- REQUIRED
+harpoon:setup()
+-- REQUIRED
+
+vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
+vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+
+vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
+vim.keymap.set("n", "<C-t>", function() harpoon:list():select(2) end)
+vim.keymap.set("n", "<C-n>", function() harpoon:list():select(3) end)
+vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
+
+-- Toggle previous & next buffers stored within Harpoon list
+vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
+vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
+
+
+-- Start terminal mode when terminal buffers open
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.cmd "startinsert!"
+  end,
+})
+
+
+-- 
+
+
